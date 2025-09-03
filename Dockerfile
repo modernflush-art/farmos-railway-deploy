@@ -13,8 +13,8 @@ RUN mkdir -p /opt/drupal/web/sites/default/private/files && \
     chown -R www-data:www-data /opt/drupal/web/sites && \
     chmod -R 770 /opt/drupal/web/sites/default/private
 
-# Create healthcheck endpoint
-RUN echo '<?php echo "OK"; ?>' > /opt/drupal/web/health.php
+# Copy healthcheck endpoint
+COPY health.php /opt/drupal/web/health.php
 
 # Expose port 80
 EXPOSE 80
