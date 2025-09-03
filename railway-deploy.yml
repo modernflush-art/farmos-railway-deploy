@@ -1,0 +1,24 @@
+# Railway deployment configuration for farmOS
+# This file helps Railway understand how to deploy your farmOS application
+
+services:
+  farmos:
+    build:
+      dockerfile: Dockerfile
+    healthcheck:
+      path: /
+      timeout: 300
+    environment:
+      - DB_HOST=${{Postgres.PGHOST}}
+      - DB_PORT=${{Postgres.PGPORT}}
+      - DB_NAME=${{Postgres.PGDATABASE}}
+      - DB_USER=${{Postgres.PGUSER}}
+      - DB_PASSWORD=${{Postgres.PGPASSWORD}}
+    volumes:
+      - /opt/drupal/web/sites
+
+  postgres:
+    image: postgres:15
+    environment:
+      - POSTGRES_DB=farmos
+      - POSTGRES_USER=postgres
