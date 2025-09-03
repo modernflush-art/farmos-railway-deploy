@@ -13,15 +13,16 @@ RUN mkdir -p /opt/drupal/web/sites/default/private/files && \
     chown -R www-data:www-data /opt/drupal/web/sites && \
     chmod -R 770 /opt/drupal/web/sites/default/private
 
-# Copy healthcheck endpoint
+# Copy healthcheck endpoint and startup script
 COPY health.php /opt/drupal/web/health.php
+COPY startup.sh /usr/local/bin/startup.sh
+RUN chmod +x /usr/local/bin/startup.sh
 
 # Expose port 80
 EXPOSE 80
 
-# Health check for Railway
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost/health.php || exit 1
+# Remove Docker healthcheck for Railway (Railway will handle this)
+# HEALTHCHECK disabled for Railway deployment
 
-# Start Apache
-CMD ["apache2-foreground"]
+# Use startup script
+CMD ["/usr/local/bin/startup.sh"]
